@@ -1,0 +1,23 @@
+# Global excludes across all subdirectories
+*.o
+*.so
+*.so.[0-9]
+*.so.[0-9].[0-9]
+*.dylib
+*.a
+*.out
+*.mo
+*.pot
+*.gcno
+*.gcda
+*.gcov
+*.gcov.out
+*.la
+*.lo
+lcov.info
+Makefile
+*.Po
+*.Plo
+*.in
+*.log
+*.m4
