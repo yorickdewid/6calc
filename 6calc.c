@@ -20,7 +20,8 @@
  */
 struct addr6 {
     unsigned char subnet;
-    unsigned short oct[4];
+    unsigned short oct_low[4];
+    unsigned short oct_hi[4];
 };
 
 /* Program name without prefix */
@@ -68,7 +69,7 @@ int ishex(char *str){
 }
 
 int main(int argc, char *argv[]){
-    char *pch;
+    char *pch, semi=0;
     int i=0;
     struct addr6 ai;
 
@@ -101,6 +102,13 @@ int main(int argc, char *argv[]){
     /* Validate address */
     char *addr = argv[1];
     addr[pch-addr-1] = '\0';
+    char *low=NULL,*hi = strstr(addr,"::");
+    if(hi!=NULL){
+        semi=1;
+        low = strndup(addr, hi-addr);
+        puts(low);
+    }
+
     pch = strtok(addr,":");
     while(pch!=NULL){
         if(i>7){
@@ -112,11 +120,20 @@ int main(int argc, char *argv[]){
             return 0;
         }
         pch[4] = '\0';
-        ai.oct[i] = (short)hex_dec(pch);
-        printf("%d : %d\n", i, ai.oct[i]);
+        ai.oct_low[i] = (short)hex_dec(pch);
+        printf("%d : %d\n", i, ai.oct_low[i]);
         pch = strtok(NULL,":");
         i++;
     }
+
+    if(!semi&&i!=8){
+        fprintf(stderr, "Address invalid\n");
+        return 0;
+    }
+
+    /* Dealloc memory */
+    if(low!=NULL)
+        free(low);
 
     return 0;
 }
